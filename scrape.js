@@ -907,6 +907,4 @@ async function scrapeProxy() {
   console.log(`\n[Done] Total proxy unik: ${allProxies.size}`);
 }
 
-module.exports = {
-  scrapeProxy
-};
+  scrapeProxy()
