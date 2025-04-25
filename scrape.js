@@ -888,19 +888,19 @@ const proxyUrls = [
 async function scrapeProxy() {
   const allProxies = new Set();
   const total = proxyUrls.length;
-  let index = 0;
 
-  for (const url of proxyUrls) {
-    index++;
+  const fetches = proxyUrls.map(async (url, index) => {
     try {
-      console.log(`[#${index}/${total}] Mengambil dari: ${url}`);
+      console.log(`[#${index + 1}/${total}] Mengambil dari: ${url}`);
       const res = await axios.get(url, { timeout: 15000 });
       const lines = res.data.split('\n').map(l => l.trim()).filter(l => l && l.includes(':'));
       lines.forEach(proxy => allProxies.add(proxy));
     } catch (err) {
       console.warn(`[Gagal] ${url} - ${err.message}`);
     }
-  }
+  });
+
+  await Promise.all(fetches);
 
   const proxyList = Array.from(allProxies).join('\n');
   await writeFile('proxy.txt', proxyList);
